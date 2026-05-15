@@ -1,148 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SillyMonkeyGames</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SillyMonkeyGames</title>
 
+    <!-- FAVICON — place your image in the root folder and update the href -->
+    <link rel="icon" href="favicon.png" type="image/png" />
 
-  <link href="fonts/font1" rel="stylesheet"/>
-  <style>
-    :root {
-      --font: 'Inter', system-ui, sans-serif; /* ← change font name here */
-    }
+    <!-- FONT — replace the href and update --font below -->
+    <link href="fonts/font1" rel="stylesheet" />
+    <style>
+        :root {
+            --font: 'Inter', system-ui, sans-serif; /* ← change font name here */
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      background: #111;
-      color: #fff;
-      font-family: var(--font);
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
+        body {
+            background: #111;
+            color: #fff;
+            font-family: var(--font);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 36px;
-    }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
 
-    .site-title { font-size: 1.1rem; font-weight: 700; }
+        .site-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
 
-    .tabs { display: flex; gap: 4px; }
-    .tab {
-      padding: 6px 16px;
-      border-radius: 6px;
-      border: none;
-      background: transparent;
-      color: #666;
-      font-size: 0.85rem;
-      font-family: var(--font);
-      cursor: pointer;
-      transition: color 0.15s, background 0.15s;
-    }
-    .tab:hover { color: #ccc; }
-    .tab.active { background: #222; color: #fff; }
+        .tabs {
+            display: flex;
+            gap: 4px;
+        }
 
-    .page { display: none; }
-    .page.active { display: block; }
+        .tab {
+            padding: 6px 16px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 0.85rem;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: color 0.15s, background 0.15s;
+        }
 
-    #grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-    }
+            .tab:hover {
+                color: #ccc;
+            }
 
-    .card {
-      display: block;
-      text-decoration: none;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #1a1a1a;
-      transition: opacity 0.15s;
-    }
-    .card:hover { opacity: 0.8; }
+            .tab.active {
+                background: #222;
+                color: #fff;
+            }
 
-    .card img {
-      width: 100%; aspect-ratio: 1;
-      object-fit: cover; display: block;
-      image-rendering: pixelated;
-    }
+        .page {
+            display: none;
+        }
 
-    .card-label {
-      padding: 8px 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #ccc;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+            .page.active {
+                display: block;
+            }
 
-    #page-credits { color: #aaa; font-size: 0.9rem; line-height: 2; }
-    #page-credits strong { color: #fff; }
-    #page-credits a { color: #aaa; text-decoration: underline; }
-    #page-credits a:hover { color: #fff; }
-  </style>
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .card {
+            display: block;
+            text-decoration: none;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #1a1a1a;
+            transition: opacity 0.15s;
+        }
+
+            .card:hover {
+                opacity: 0.8;
+            }
+
+            .card img {
+                width: 100%;
+                aspect-ratio: 1;
+                object-fit: cover;
+                display: block;
+                image-rendering: pixelated;
+            }
+
+        .card-label {
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ccc;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #page-credits {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 2;
+        }
+
+            #page-credits strong {
+                color: #fff;
+            }
+
+            #page-credits a {
+                color: #aaa;
+                text-decoration: underline;
+            }
+
+                #page-credits a:hover {
+                    color: #fff;
+                }
+    </style>
 </head>
 <body>
 
-<div class="topbar">
-  <span class="site-title">Games</span>
-  <div class="tabs">
-    <button class="tab active" data-tab="games">Games</button>
-    <button class="tab" data-tab="credits">Credits</button>
-  </div>
-</div>
+    <div class="topbar">
+        <span class="site-title">Games</span>
+        <div class="tabs">
+            <button class="tab active" data-tab="games">Games</button>
+            <button class="tab" data-tab="credits">Credits</button>
+        </div>
+    </div>
 
-<div id="page-games" class="page active">
-  <div id="grid"></div>
-</div>
+    <div id="page-games" class="page active">
+        <div id="grid"></div>
+    </div>
 
-<div id="page-credits" class="page">
-  <strong>SillyMonkeyFlip (Ermology)</strong><br>
-  Game Developer<br>
-  <a href="https://github.com/SillyMonkeyFlip" target="_blank">GitHub</a> ·
-  <a href="https://sillymonkeyflip.itch.io" target="_blank">itch.io</a><br><br>
-  <a href="https://gamebanana.com/members/5432674" target="_blank">Game Banana</a><br><br>
-  Decompiled + Compiled most games!<br>
-  Hosted on GitHub Pages.
-  Claude with website temp
-</div>
+    <div id="page-credits" class="page">
+        <strong>SillyMonkeyFlip (Ermology)</strong><br>
+        Game Developer<br>
+        <a href="https://github.com/SillyMonkeyFlip" target="_blank">GitHub</a> ·
+        <a href="https://sillymonkeyflip.itch.io" target="_blank">itch.io</a><br><br>
+        <a href="https://gamebanana.com/members/5432674" target="_blank">Game Banana</a><br><br>
+        Decompiled + Compiled most games!<br>
+        Hosted on GitHub Pages.
+        Claude with website temp
+    </div>
 
-<script>
-  // ── ADD YOUR GAMES HERE ──────────────────────
-    const GAMES = [
-        { name: "Calvins Basics", folder: "CalvinsBasics"},
-    // { name: "My Game",       folder: "MyGame"       },
-    // { name: "Space Shooter", folder: "SpaceShooter" },
-  ];
-  // ─────────────────────────────────────────────
+    <script>
+        // ── ADD YOUR GAMES HERE ──────────────────────
+        const GAMES = [
+            { name: "Calvins Basics", folder: "CalvinsBasics" },
+            // { name: "My Game",       folder: "MyGame"       },
+            // { name: "Space Shooter", folder: "SpaceShooter" },
+        ];
+        // ─────────────────────────────────────────────
 
-  const grid = document.getElementById('grid');
-  const FB = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E`;
+        const grid = document.getElementById('grid');
+        const FB = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E`;
 
-  GAMES.forEach(g => {
-    const a = document.createElement('a');
-    a.className = 'card';
-    a.href = `games/${g.folder}/index.html`;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.innerHTML = `<img src="games/${g.folder}/icon.png" alt="${g.name}" onerror="this.src='${FB}'"/><div class="card-label">${g.name}</div>`;
-    grid.appendChild(a);
-  });
+        GAMES.forEach(g => {
+            const a = document.createElement('a');
+            a.className = 'card';
+            a.href = `games/${g.folder}/index.html`;
+            a.innerHTML = `<img src="games/${g.folder}/icon.png" alt="${g.name}" onerror="this.src='${FB}'"/><div class="card-label">${g.name}</div>`;
+            grid.appendChild(a);
+        });
 
-  document.querySelectorAll('.tab').forEach(t => {
-    t.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-      document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      document.getElementById(`page-${t.dataset.tab}`).classList.add('active');
-    });
-  });
-</script>
+        document.querySelectorAll('.tab').forEach(t => {
+            t.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                document.getElementById(`page-${t.dataset.tab}`).classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
