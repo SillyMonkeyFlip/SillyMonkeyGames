@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SillyMonkeyGames</title>
 
-    <!-- FAVICON — place your image in the root folder and update the href -->
     <link rel="icon" href="favicon.png" type="image/png" />
-
-    <!-- FONT — replace the href and update --font below -->
     <link href="fonts/font1" rel="stylesheet" />
     <style>
         :root {
-            --font: 'Inter', system-ui, sans-serif; /* ← change font name here */
+            --font: 'Inter', system-ui, sans-serif;
         }
 
         * {
@@ -34,7 +31,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 36px;
+            margin-bottom: 24px;
         }
 
         .site-title {
@@ -76,6 +73,38 @@
                 display: block;
             }
 
+        /* ── category filters ── */
+        #filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid #2a2a2a;
+            background: transparent;
+            color: #666;
+            font-size: 0.75rem;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+            .filter-btn:hover {
+                color: #ccc;
+                border-color: #444;
+            }
+
+            .filter-btn.active {
+                background: #fff;
+                color: #111;
+                border-color: #fff;
+            }
+
+        /* ── grid ── */
         #grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -95,6 +124,10 @@
                 opacity: 0.8;
             }
 
+            .card.hidden {
+                display: none;
+            }
+
             .card img {
                 width: 100%;
                 aspect-ratio: 1;
@@ -111,6 +144,21 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .card-tags {
+            padding: 0 10px 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .card-tag {
+            font-size: 0.65rem;
+            color: #555;
+            background: #222;
+            border-radius: 4px;
+            padding: 2px 6px;
         }
 
         #page-credits {
@@ -144,6 +192,7 @@
     </div>
 
     <div id="page-games" class="page active">
+        <div id="filters"></div>
         <div id="grid"></div>
     </div>
 
@@ -157,36 +206,63 @@
 
         <strong>Things not by me (SillyMonkeyFlip)</strong>
         -3, -b, t3 - Bog (Truffle.lol)<br>
-      <br>  <br>Hosted on GitHub Pages.<br>
+        <br><br>Hosted on GitHub Pages.<br>
         Claude with website temp
     </div>
 
     <script>
         // ── ADD YOUR GAMES HERE ──────────────────────
+        // categories: add as many tags as you want per game
         const GAMES = [
-            { name: "Calvins Basics", folder: "CalvinsBasics" },
-            { name: "Baldi's Basics Classic Remastered (Broken rn)", folder: "BaldisBasicsClassicRemastered" },
-            { name: "-3 (check credits)", folder: "BaldiMods/-3" },
-            { name: "-b (check credits)", folder: "BaldiMods/-b" },
-            { name: "-b (by me)", folder: "BaldiMods/-bByMe" },
-            { name: "t3 (check credits)", folder: "BaldiMods/t3" },
-            { name: "-9", folder: "BaldiMods/-9" },
-            { name: "-9 Remaster", folder: "BaldiMods/-9 Remaster" },
-            // { name: "My Game",       folder: "MyGame"       },
-            // { name: "Space Shooter", folder: "SpaceShooter" },
+            { name: "Calvins Basics", folder: "CalvinsBasics", categories: ["Baldi", "Mod", "Horror"] },
+            { name: "Baldi's Basics Classic Remastered (Broken rn)", folder: "BaldisBasicsClassicRemastered", categories: ["Baldi", "Broken", "Horror"] },
+            { name: "-3 (check credits)", folder: "BaldiMods/-3", categories: ["Baldi", "Mod", "Horror"] },
+            { name: "-b (check credits)", folder: "BaldiMods/-b", categories: ["Baldi", "Mod", "Horror"] },
+            { name: "-b (by me) (Broken rn)", folder: "BaldiMods/-bByMe", categories: ["Baldi", "Mod", "Broken", "Horror"] },
+            { name: "t3 (check credits)", folder: "BaldiMods/t3", categories: ["Baldi", "Mod", "Horror"] },
+            { name: "-9", folder: "BaldiMods/-9", categories: ["Baldi", "Mod", "Horror"] },
+            { name: "-9 Remaster", folder: "BaldiMods/-9 Remaster", categories: ["Baldi", "Horror"] },
+            { name: "Granny v1.2.2", folder: "Granny", categories: ["Granny", "Horror"] },
+            // { name: "My Game", folder: "MyGame", categories: ["Action"] },
         ];
         // ─────────────────────────────────────────────
 
         const grid = document.getElementById('grid');
+        const filters = document.getElementById('filters');
         const FB = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E`;
+        let active = 'All';
+
+        const allCats = ['All', ...new Set(GAMES.flatMap(g => g.categories || []))];
+
+        allCats.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn' + (cat === 'All' ? ' active' : '');
+            btn.textContent = cat;
+            btn.addEventListener('click', () => {
+                active = cat;
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterCards();
+            });
+            filters.appendChild(btn);
+        });
 
         GAMES.forEach(g => {
             const a = document.createElement('a');
             a.className = 'card';
             a.href = `games/${g.folder}/index.html`;
-            a.innerHTML = `<img src="games/${g.folder}/icon.png" alt="${g.name}" onerror="this.src='${FB}'"/><div class="card-label">${g.name}</div>`;
+            a.dataset.categories = JSON.stringify(g.categories || []);
+            const tagHTML = (g.categories || []).map(c => `<span class="card-tag">${c}</span>`).join('');
+            a.innerHTML = `<img src="games/${g.folder}/icon.png" alt="${g.name}" onerror="this.src='${FB}'"/><div class="card-label">${g.name}</div><div class="card-tags">${tagHTML}</div>`;
             grid.appendChild(a);
         });
+
+        function filterCards() {
+            document.querySelectorAll('.card').forEach(card => {
+                const cats = JSON.parse(card.dataset.categories);
+                card.classList.toggle('hidden', active !== 'All' && !cats.includes(active));
+            });
+        }
 
         document.querySelectorAll('.tab').forEach(t => {
             t.addEventListener('click', () => {
